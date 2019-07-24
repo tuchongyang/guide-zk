@@ -1,0 +1,39 @@
+doctype html
+html(lang="en")
+    include ../includes/head.jade
+
+    body()
+        style(type="text/css")
+            .login-box{position: relative;}
+            .login-box .title{position:absolute;width:100%;top: -50px;left:0;color:#fff;font-size: 20px;text-align:center;}
+            .login-box .form-control{line-height:30px;}
+            .btn-login{display:block;line-height:30px;width:100%;font-size:16px;}
+
+        .container
+            include ../includes/messages.jade
+            .install-box
+                if !users.length
+                    form(method="POST",action="/install/create")
+                        //- .form-group
+                        //-     label 网站标题
+                        //-     input.form-control(type="text",name="title",placeholder="请输入网站标题")
+                        //- .form-group
+                        //-     label 网站描述
+                        //-     input.form-control(type="text",name="description",placeholder="请输入网站描述")
+                        .form-group
+                            label 管理员账号
+                            input.form-control(type="text",name="username",placeholder="请输入管理员账号")
+                        .form-group
+                            label 管理员账号
+                            input.form-control(type="text",name="email",placeholder="请输入管理员邮箱")
+                        .form-group
+                            label 管理员密码
+                            input.form-control(type="password",name="password",placeholder="请输入管理员密码")
+                        .form-group
+                            button.btn.btn-primary.btn-login(tyoe="submit") 提交
+                else 
+                    h1 系统已安装，管理员为：
+                        span=users[0].name
+                    div
+                        a(href="/admin/login") 前往登录
+        include ../includes/foot.jade

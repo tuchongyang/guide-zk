@@ -3,6 +3,7 @@ const Index = require('../app/controllers/web/index')
 const auth = require('./middlewares/authorization');
 
 const Admin = require('../app/controllers/admin/admin')
+const Install = require('../app/controllers/admin/install')
 
 module.exports = function (app, passport) {
 	const pauth = passport.authenticate.bind(passport);
@@ -18,17 +19,11 @@ module.exports = function (app, passport) {
 	app.get('/', Index.index);
 	app.get('/o/:office_id', Index.office_detail);
 
-
+	app.get('/install',Install.install);
+	app.post('/install/create',Install.install_create);
 
 	//admin
 	app.get('/admin',auth.admin.requiresLogin, auth.admin.adminAuth,Admin.main)
-
-	// app.get('/admin/movie/new',auth.admin.requiresLogin, auth.admin.adminAuth, Admin.movie.new)
-	// app.get('/admin/movie/spider',auth.admin.requiresLogin, auth.admin.adminAuth, Admin.movie.spider)
-	// app.post('/admin/movie/save',auth.admin.requiresLogin, auth.admin.adminAuth, Admin.movie.save)
-	// app.get('/admin/movie/:id',auth.admin.requiresLogin, auth.admin.adminAuth, Admin.movie.detail)
-	// app.delete('/admin/movie/:id', auth.admin.requiresLogin, auth.admin.adminAuth,Admin.movie.delete)
-
 
 	//admin login
 	app.get('/admin/login', Admin.user.loginView)
@@ -36,11 +31,11 @@ module.exports = function (app, passport) {
 	app.get('/logout', Admin.user.logout)
 
 	//admin user
-	app.get('/admin/user/list',Admin.user.list)
-	app.post('/admin/user/save',Admin.user.save)
-	app.get('/admin/user/detail/:id',auth.admin.requiresLogin, auth.admin.adminAuth, Admin.user.detail)
-	app.get('/admin/user_new', Admin.user.new)
-	app.delete('/admin/user/:id', Admin.user.delete)
+	app.get('/admin/user/list',auth.admin.requiresLogin, auth.admin.adminAuth,Admin.user.list)
+	app.post('/admin/user/save',auth.admin.requiresLogin, auth.admin.adminAuth,Admin.user.save)
+	app.get('/admin/user/detail/:id',auth.admin.requiresLogin, auth.admin.adminAuth,auth.admin.requiresLogin, auth.admin.adminAuth, Admin.user.detail)
+	app.get('/admin/user_new',auth.admin.requiresLogin, auth.admin.adminAuth, Admin.user.new)
+	app.delete('/admin/user/:id',auth.admin.requiresLogin, auth.admin.adminAuth, Admin.user.delete)
 	app.get('/api/account/image/list', auth.admin.requiresLogin, Admin.image.account_list)
 
 	//admin image
