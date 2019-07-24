@@ -1,0 +1,25 @@
+doctype html
+html(lang="en")
+    include includes/head.jade
+
+    body(style="background-color: #00a997;background-image: linear-gradient(143deg,#045950 20%,#047c70 81%,#00a997);")
+        style(type="text/css").
+            .login-box{position: relative;}
+            .login-box .title{position:absolute;width:100%;top: -50px;left:0;color:#fff;font-size: 20px;text-align:center;}
+            .login-box .form-control{line-height:30px;}
+            .btn-login{display:block;line-height:30px;width:100%;font-size:16px;}
+
+        .container
+            include includes/messages.jade
+            .login-box
+                .title 国网枝江供电营业厅
+                form(method="POST",action="/admin/login")
+                    .form-group
+                        label 用户
+                        input.form-control(type="text",name="username",placeholder="请输入用户名或邮箱")
+                    .form-group
+                        label 密码
+                        input.form-control(type="password",name="password",placeholder="请输入密码")
+                    .form-group
+                        button.btn.btn-primary.btn-login(tyoe="submit") 登录
+        include includes/foot.jade

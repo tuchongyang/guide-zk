@@ -1,0 +1,49 @@
+{
+  "name": "office-guide",
+  "version": "1.0.0",
+  "description": "office-guide project",
+  "main": "server.js",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "co": "^4.6.0",
+    "connect-flash": "^0.1.1",
+    "connect-mongo": "^2.0.1",
+    "cookie-parser": "^1.4.3",
+    "cookie-session": "^2.0.0-beta.3",
+    "crypto": "^1.0.1",
+    "dotenv": "^5.0.1",
+    "express": "^4.16.3",
+    "express-session": "^1.15.6",
+    "jade": "^1.11.0",
+    "moment": "^2.22.1",
+    "mongoose": "^5.0.14",
+    "multiparty": "^4.1.3",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "serve-static": "^1.13.2",
+    "svg-captcha": "^1.3.11",
+    "underscore": "^1.9.0"
+  },
+  "devDependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "grunt": "^1.0.2",
+    "grunt-concurrent": "^2.3.1",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-nodemon": "^0.4.2",
+    "superagent": "^3.8.2"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tuchongyang/office-guide.git"
+  },
+  "author": "tuchongyang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tuchongyang/office-guide/issues"
+  },
+  "homepage": "https://github.com/tuchongyang/office-guide#readme"
+}

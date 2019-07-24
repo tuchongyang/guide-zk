@@ -1,0 +1,134 @@
+html{height: 100%;}
+body{background:#f4f4f4;height: 100%;font-size: .8rem;}
+.form-control,.btn{font-size: .8rem;}
+
+.header{position: fixed;width: 100%;height: 70px;background: #373d41;box-shadow: 0 0 10px rgba(0,0,0,.1);left:0;top:0;z-index:90;color: #fff;
+    background-color: #00a997;z-index: 100;background-image: linear-gradient(143deg,#045950 20%,#047c70 81%,#00a997);}
+.sitbar{position: fixed;width: 180px;top: 70px;bottom:0;overflow: auto;background: #fff;z-index: 92;background:#333744;}
+.sitbar a{color: #fff;font-size: 14px;line-height: 30px;padding-left: 20px;border-left:5px solid transparent;}
+.sitbar a:hover{background-color:rgba(255,255,255,.1);}
+.sitbar i{margin-right: 10px;}
+.sitbar .nav .nav-link.active,.sitbar .nav .show>.nav-link{background-color:rgba(255,255,255,.1);border-left:5px solid #00a997;}
+.main{margin: 90px 20px 20px 200px;position: relative;z-index: 10;}
+
+.header .logo h1{font-size: 24px;line-height: 70px;margin:0;padding: 0 20px;}
+
+.breadcrumb{background: none;padding-left: 0;padding-right: 0;}
+
+.main-title{font-size: 18px;border-left: 2px  solid #333;padding-left: 10px;color:#333;margin-bottom: 30px;}
+
+.table-container{background:#fff;}
+.table-container .form{padding:20px;}
+.table-container table thead td{font-weight: bold;}
+.table-container table td{font-size: 14px;padding: .5rem;}
+.table-container table td .btn{font-size: 12px;}
+
+.empty{padding: 30px 0;text-align: center;color:#999;}
+.pagination .page-txt{    padding: .5rem .75rem;display: inline-block;color: #666;}
+
+.login-box{width: 400px;margin: 100px auto;background: #fff;border-radius:5px;box-shadow: 0 0 10px rgba(0,0,0,.1);border:1px solid #eee;padding: 40px;}
+
+
+.edit-avatar{ overflow: hidden; }
+.edit-avatar .img{display: inline-block;width: 50px;height: 50px;background: #eee;float: left;background-size: cover;background-position: center;}
+.edit-avatar .btn-upload{float: left;margin-left: 20px;margin-top: 5px;overflow: hidden;position: relative;cursor: pointer;}
+.edit-avatar .btn-upload input{position: absolute;width: 100%;height: 100%;display: block;top: 0;left: 0;opacity: 0;cursor: pointer;}
+.edit-avatar .btn-upload .txt{}
+
+.user-head{line-height: 40px;}
+.user-head .img{display: inline-block;width: 40px;height: 40px;background: #eee;border-radius: 50%;overflow: hidden;background-size: cover;background-position: center;margin-right: 10px;}
+.user-head span{vertical-align: middle;}
+
+.state-group{ overflow: hidden; }
+.state-group .item{width: 20%;float: left;padding: 1rem 0;background-color: #fff;text-align: center;border-right:1px solid #eee;}
+.state-group .item a{display: block;color:#333;}
+.state-group .item a:hover{text-decoration: none;color:#00a997;}
+.state-group .item b{display: block;font-size: 24px;}
+.fast-menus{overflow: hidden;}
+.fast-menus .item{text-align: center;width: 10rem;float: left;color: #333;margin-bottom: 1.5rem;}
+.fast-menus .item:hover{text-decoration: none;color:#007bff;}
+.fast-menus span{display: block;margin-top: .5rem;}
+.fast-menus i{font-size: 1.5rem;}
+
+.form-date{float:left;width: 200px;}
+.form-date + .form-date{margin-left: 10px;}
+#areaTown{margin-bottom: 10px;}
+.dw-img-container{text-align: center;}
+.dw-img-wraper{position: relative;display: inline-block;margin: 0 auto;}
+.dw-img-wraper .path_img{position: absolute;z-index:20;top:50%;left: 50%;}
+
+
+/**/
+.wave {  position: relative;  width: 70px;  height: 70px;  text-align: center; line-height: 70px;  font-size: 28px;  }  
+.wave .circle {  position: absolute;  border-radius: 50%;  opacity: 0;  }  
+.wave-content{line-height: 65px;}
+.wave-content i{width: 10px;height: 10px;background: #df0000;border-radius:50%;display: block;position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%);-webkit-transform: translate(-50%,-50%);    margin-left: -2px;margin-top: -2px;}
+
+/* 波纹效果 */  
+.wave.ripple .circle {  
+    width: calc(100% - 6px); /* 减去边框的大小 */  
+    height: calc(100% - 6px);/* 减去边框的大小 */  
+    border: 3px solid #fff;  
+}  
+
+.wave.ripple .circle:first-child {  
+    animation: circle-opacity 2s infinite;  
+}  
+
+.wave.ripple .circle:nth-child(2) {  
+    animation: circle-opacity 2s infinite;  
+    animation-delay: .3s;  
+}  
+
+.wave.ripple .circle:nth-child(3) {  
+    animation: circle-opacity 2s infinite;  
+    animation-delay: .6s;  
+}  
+
+.wave.ripple.danger {  
+    color: red;  
+}  
+
+.wave.ripple.danger .circle {  
+    border-color: red;  
+}  
+
+.wave.ripple.warning {  
+    color: orange;  
+}  
+
+.wave.ripple.warning .circle {  
+    border-color: orange;  
+}  
+@keyframes circle-opacity{  
+    from {  
+        opacity: 1;  
+        transform: scale(0);  
+    }  
+    to {  
+        opacity: 0;  
+        transform: scale(1);  
+    }  
+} 
+
+
+
+.upload-imgs{}
+.upload-imgs:after{content: "";display: block;clear: both;}
+.upload-imgs .item{width: 100px;height: 100px;background: #f4f4f4;border:1px solid #eee;float:left;margin: 0 15px 15px 0;background-size: contain;background-repeat: no-repeat;background-position: center;}
+.upload-imgs .item-upload{background: #fff;border:2px dashed #ddd;border-radius:5px;position: relative;cursor: pointer;}
+.upload-imgs .item-upload:before,.upload-imgs .item-upload:after{content:"";display:block;width: 50%;height: 4px;background: #eee;position: absolute;top: 50%;margin-top:-2px;left: 25%;}
+.upload-imgs .item-upload:after{transform: rotate(90deg);transform-origin: center center;}
+.upload-imgs .item-upload:active{box-shadow: 1px 1px 8px rgba(0,0,0,.1) inset;}
+
+.guide-edit{}
+.guid-edit-bar{padding: 15px;}
+.guide-edit .title{margin-bottom: 15px;}
+.guid-edit-bar .nav a{border:1px solid #ddd;margin-top: -1px;line-height: 30px;}
+.guid-edit-bar .add-menu-group{margin-top: 30px;}
+.guid-edit-bar .nav .nav-item{position: relative;}
+.guid-edit-bar .nav .btn-mod{position: absolute;width: 30px;height: 30px;line-height:30px;cursor:pointer;color:#fff;display:none;right:30px;top: 50%;margin-top:-15px;z-index: 10;text-align: center;}
+.guid-edit-bar .nav .btn-del{position: absolute;width: 30px;height: 30px;line-height:30px;cursor:pointer;color:#fff;display:none;right:0;top: 50%;margin-top:-15px;z-index: 10;text-align: center;}
+.guid-edit-bar .nav .btn-mod:hover,.guid-edit-bar .nav .btn-del:hover{background:rgba(0,0,0,.1);}
+.guid-edit-bar .nav .active ~ .btn-mod,.guid-edit-bar .nav .active ~ .btn-mod ~ .btn-del{display: block;}
+.guide-edit-con{padding: 15px 0;}

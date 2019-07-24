@@ -1,0 +1,73 @@
+extend ../layouts/admin
+block head
+	- var selected = 'image'
+block main
+	h1.main-title #{title}
+
+	//- .button-group.mb-3.clearfix
+	//- 	a.btn.btn-primary.float-right(href="/admin/user_new") 新增
+
+	.table-container
+		table.table
+			thead
+				tr
+					td 编号
+					td 图片
+					td 大小(kb)
+					td 格式
+					td 创建者
+					td 更新时间
+					td 创建时间
+					td 操作
+			tbody
+				each item,index in list
+					tr
+						td= index+1
+						td
+							a(href="#{item.file}",target="_blank")
+								img(src="#{item.file}",height="50")
+						td= item.size/1000
+						td= item.format
+						td
+							if item.creator
+								a(href="/admin/user/detail/#{item.creator._id}")= (item.creator.name || item.creator.username)
+							else
+								span 无
+						td #{moment(item.meta.updateAt).format('YYYY-MM-DD hh:mm:ss')}
+						td #{moment(item.meta.createAt).format('YYYY-MM-DD hh:mm:ss')}
+						td
+							a.btn.btn-primary(href="#{item.file}",target="_blank") 查看
+							|&nbsp;
+							//- a.btn.btn-danger.btn-del(href="javascript:;",data-id="#{item._id}") 删除
+		if list.length<=0
+			.empty 没有用户数据
+
+	
+		
+
+block foot
+	script(type="text/javascript").
+		$(function(){
+			
+			/*电影删除*/
+			$('.btn-del').click(function(){
+				var id=$(this).data("id");
+				if(confirm("确认删除吗")){
+
+					$.ajax({
+						url:"/admin/image/"+id,
+						method:"DELETE",
+						success:function(data){
+							if(data.success){
+								location.reload();
+							}else{
+								alert(data.msg)
+							}
+							
+							
+						}
+					})
+				}
+				
+			})
+		})

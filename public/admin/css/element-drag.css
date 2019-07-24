@@ -1,0 +1,199 @@
+
+
+/**/
+.pst-element {
+		position: absolute;
+		    color: #676767;
+    line-height: 1;
+    background: none;
+    list-style: none!important;
+    margin: 0!important;
+    padding: 0;
+    transition: padding .5s;
+    min-height: 1px;
+    min-width: 1px;
+    text-align: left;
+    -webkit-user-select: none;
+}
+.pst-element .el-content{
+	text-align: left;
+	text-decoration: initial;
+	overflow: hidden;
+}
+.pst-element .el-content img{
+	width:100%;height:100%;pointer-events: none;
+}
+.pst-element .nbar {
+		position: absolute;
+		z-index: 998;
+}
+.nbar-radius {
+		width: 12px;
+		height: 12px;
+
+		border: 1px solid #08a1ef;
+		border-radius: 50%;
+		background-color: #fff;
+}
+.nbar-rotate {
+		top: -35px;
+		left: 50%;
+		width:20px;
+		height:20px;
+		margin-left: -10px;
+
+		cursor: url(../images/mouserotate.ico) 10 10, default;
+		transition:all .2s;
+
+		border: none;
+		background-color: #44cb83;
+}
+.nbar-line {
+		top: -23px;
+		left: 50%;
+
+		width: 1px;
+		height: 18px;
+
+		background-color: #44cb83;
+}
+.nbar-n {
+		top: -1px;
+		left: 0;
+		display: none;
+
+		width: 100%;
+		height: 5px;
+
+		cursor: n-resize;
+
+		background: url(../images/bar-1px.png) repeat-x;
+}
+.nbar-n div {
+		position: absolute;
+		top: -6px;
+		left: 50%;
+
+		margin-left: -6px;
+}
+.nbar-s {
+		bottom: -1px;
+		left:0;
+		width: 100%;
+		height: 5px;
+
+		cursor: s-resize;
+
+		background: url(../images/bar-1px.png) repeat-x bottom;
+
+}
+.nbar-s div {
+		position: absolute;
+		top: 0;
+		left: 50%;
+
+		margin-left: -6px;
+}
+.nbar-e {
+		top: 0;
+		right: -1px;
+
+		width: 5px;
+		height: 100%;
+
+		cursor: e-resize;
+
+		background: url(../images/bar-1px.png) right repeat-y;
+
+}
+.nbar-e div {
+		position: absolute;
+		top: 50%;
+		right: -6px;
+
+		margin-top: -6px;
+}
+.nbar-w {
+		top: 0;
+		left: -1px;
+
+		width: 5px;
+		height: 100%;
+
+		cursor: w-resize;
+
+		background: url(../images/bar-1px.png) repeat-y;
+
+}
+.nbar-w div {
+		position: absolute;
+		top: 50%;
+		left: -6px;
+
+		margin-top: -6px;
+}
+.nbar-nw {
+		top: -6px;
+		left: -6px;
+
+		cursor: nw-resize;
+}
+.nbar-se {
+		right: -6px;
+		bottom: -6px;
+
+		cursor: se-resize;
+
+}
+.nbar-sw {
+		bottom: -6px;
+		left: -6px;
+
+		cursor: sw-resize;
+
+}
+.nbar-ne {
+		top: -6px;
+		right: -6px;
+
+		cursor: ne-resize;
+
+}
+.nbar-edit{
+		width:18px;height:18px;text-align: center;font-size:12px;line-height:18px;
+}
+.nbar-rotate.drag-active{
+		transform:scale(1.1,1.1);
+}
+.drag-active{
+		opacity:0.6;
+}
+.pst-element .nbar{
+		display:none;
+}
+.pst-element .nbar .icon{
+		display:none;
+}
+.pst-element.active{
+	/*z-index: 500;*/
+}
+.pst-element.active .nbar{
+		display:block;
+}
+.pst-element.active .nbar .icon{
+		display:block;
+}
+.pst-element.active .nbar.nbar-ne,
+.pst-element.active .nbar.nbar-sw,
+.pst-element.active .nbar.nbar-n div,
+.pst-element.active .nbar.nbar-s div,
+.pst-element.active .nbar.nbar-e div,
+.pst-element.active .nbar.nbar-w div{
+		/*display:none;*/
+}
+.pst-element .element{
+		width:100%;
+		height:100%;
+		pointer-events: none;
+}
+

@@ -1,0 +1,64 @@
+.autocompleter {
+    width: 100%;
+    display: none;
+}
+
+.autocompleter-show {
+    display: block;
+}
+
+.autocompleter,
+.autocompleter-hint {
+    position: absolute;
+}
+
+.autocompleter-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.autocompleter-item {
+    cursor: pointer;
+}
+
+.autocompleter-item:hover {
+    /* Hover State */
+}
+
+.autocompleter-item-selected {
+    /* Selected State */
+}
+
+.autocompleter-item strong {
+    /* Highlight Matches */
+}
+
+.autocompleter-hint {
+    width: 100%;
+    display: none;
+
+    /** Need absolute position over input text */
+}
+
+.autocompleter-hint-show {
+    display: block;
+}
+
+.autocompleter-hint span {
+    color: transparent;
+}
+
+
+.autocompleter{background: #fff;border:1px solid #ddd;z-index: 80;}
+.autocompleter-list {
+    box-shadow: inset 0px 0px 6px rgba(0,0,0,0.1);
+}
+.autocompleter-item {
+    padding: 6px 12px;
+    color: #444444;
+    font-size: 15px;
+    cursor: pointer;
+}

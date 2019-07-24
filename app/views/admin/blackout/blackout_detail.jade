@@ -1,0 +1,201 @@
+extend ../layouts/admin
+block head
+    - var selected = 'blackout'
+    style(type="text/css").
+        .village-tags{border:1px solid #ddd;margin-top:10px;}
+        .village-tags .title{font-weight:normal;padding:10px;font-size:14px;margin:0;background:#f9f9f9;cursor:pointer;}
+        .village-tags .title .gray{color:#999;}
+        .village-tags .title .toggle{float:right;transition: all .3s;-webkit-transition: all .3s;}
+        .village-tags .title.active .toggle{transform:rotate(180deg);-webkit-transform:rotate(180deg);}
+        .village-tags .item{display:inline-block;margin: 0 10px 10px 0;background:#f4f4f4;border:1px solid #ddd;line-height:22px;padding: 0 10px;color:#666;}
+        .village-tags .item:hover{text-decoration: none;color:#00a997;border-color:#00a997;}
+        .village-tags .list{display: none;margin-top:15px;padding:10px;}
+block main
+    h1.main-title #{title}
+
+    .table-container
+        form.form(method="POST",action="/admin/blackout/save")
+            if data._id
+                input(type="hidden",name="data[_id]",value=data._id)
+
+            
+            .form-group.row
+                label.col-sm-2.col-form-label 停电标题
+                .col-sm-10
+                    input.form-control(type="text",name="data[title]",value=data.title,placeholder="请输入停电标题")
+            .form-group.row
+                label.col-sm-2.col-form-label 停电时间
+                .col-sm-10
+                    .input-group.form-date
+                        input.form-control.start_time(type="text",name="data[start_time]",value=moment(data.start_time).format('YYYY-MM-DD hh:mm:ss'),placeholder="停电开始时间")
+                        .input-group-prepend
+                            .input-group-text
+                                i.fa.fa-calendar
+                    .input-group.form-date
+                        input.form-control.end_time(type="text",name="data[end_time]",value=moment(data.end_time).format('YYYY-MM-DD hh:mm:ss'),placeholder="停电结束时间")
+                        .input-group-prepend
+                            .input-group-text
+                                i.fa.fa-calendar
+
+                    
+            .form-group.row
+                label.col-sm-2.col-form-label 停电范围
+                .col-sm-10
+
+                    input.form-control#areaTown(type="text",name="data[area_town]",value=data.area_town,placeholder="请输入乡镇")
+                
+                    input.form-control#areaVillage(type="text",name="data[area_village]",value=data.area_village)
+
+                    .village-tags#villageTags
+                        h3.title 
+                            a.toggle
+                                i.fa.fa-chevron-down
+                            span 备选区域
+                            em.gray（可点击以下乡镇加入到停电范围）
+                        .list
+            .form-group.row
+                label.col-sm-2.col-form-label 停电线路
+                .col-sm-10
+                    input.form-control(type="text",name="data[dead_line]",value=data.dead_line,placeholder="请输入停电线路")
+            .form-group.row
+                label.col-sm-2.col-form-label 公变名称
+                .col-sm-10
+                    input.form-control#changeName(type="text",name="data[change_name]",value=data.change_name)
+
+                    .village-tags#changeTags
+                        h3.title 
+                            a.toggle
+                                i.fa.fa-chevron-down
+                            span 备选区域
+                            em.gray（可点击加入公变名称）
+                        .list
+            .form-group.row
+                label.col-sm-2.col-form-label 
+                .col-sm-10
+                    button.btn.btn-primary.col-offset-3(type="submit") 提交
+
+block foot
+    script(type="text/javascript",src="/admin/js/admin.js")
+    link(type="text/css", href="/libs/datetimepicker/jquery.datetimepicker.css",rel="stylesheet")
+    script(type="text/javascript",src="/libs/datetimepicker/jquery.datetimepicker.js")
+
+    link(type="text/css", href="/libs/autocomplete/jquery.autocomplete.css",rel="stylesheet")
+    script(type="text/javascript",src="/libs/autocomplete/jquery.autocomplete.min.js")
+
+    link(type="text/css", href="/libs/tagsinput/jquery.tagsinput.css",rel="stylesheet")
+    script(type="text/javascript",src="/libs/tagsinput/jquery.tagsinput.min.js")
+
+
+    script(type="text/javascript").
+        function uploadAvatar(e){
+            var file = e.files[0]
+            var reader = new FileReader();
+            reader.onload = function(){
+                $("#avatarImg").css({'backgroundImage':'url('+reader.result+')'})
+            }
+            reader.readAsDataURL(e.files[0]);
+            var formData = new FormData();
+            formData.append('file',file);
+
+            $.ajax({
+                url:"/api/upload",
+                method:"POST",
+                contentType : false,
+                processData: false,
+                data: formData,
+                success:function(data){
+                    $('#officeImage').val(data.obj._id);
+                }
+            })
+        }
+        function initOffarea(){
+            var offareas = [];
+            var changeTown = function(value, index){
+                var area = offareas.find(function(item){return item.town_name == value});
+                $("#villageTags .list").empty();
+                area.town_village.map(function(item){
+                    $("#villageTags .list").append('<a href="javascript:;" class="item">'+item+'</a>')
+                })
+                $("#changeTags .list").empty();
+                area.change_name.map(function(item){
+                    $("#changeTags .list").append('<a href="javascript:;" class="item">'+item+'</a>')
+                })
+               
+            }
+            $.ajax({
+                url:"/api/offarea/list",
+                method:"GET",
+                success:function(data){
+                    offareas = data.list;
+                    var source = data.list.map(function(item){
+                        return {"value": item.town_name, label: item.town_name};
+                    })
+
+                    $("#areaTown").autocompleter({ 
+                        source: source,
+                        callback: changeTown
+                    });
+
+                    
+                }
+            })
+        }
+        $(function(){
+            var now = new Date();
+            $('.start_time').datetimepicker({
+                format: "Y-m-d h:i:s",
+                minDate: now.Format('yyyy-MM-dd hh:mm:ss'),
+                onSelectTime:function(time){
+                    //$scope.data.start_time = time.Format('yyyy-MM-dd hh:mm:ss')
+                },
+                onSelectDate: function(time){
+                    //$scope.data.start_time = time.Format('yyyy-MM-dd hh:mm:ss')
+                }
+            });
+            $('.end_time').datetimepicker({
+                format: "Y-m-d h:m:s",
+                minDate:  now.Format('yyyy-MM-dd hh:mm:ss'),
+                onSelectTime:function(time){
+                    //$scope.data.end_time = time.Format('yyyy-MM-dd hh:mm:ss')
+                },
+                onSelectDate: function(time){
+                    //$scope.data.end_time = time.Format('yyyy-MM-dd hh:mm:ss')
+                }
+            });
+            $('.village-tags .title').click(function(){
+                if($(this).hasClass('active')){
+                    $(this).removeClass('active').next().slideUp();
+                }else{
+                    $(this).addClass('active').next().slideDown();
+                }
+            })
+
+
+            initOffarea();
+            
+
+            /*----------------------------------*/
+            $("#areaVillage").tagsInput({
+                "defaultText": "添加区域",
+                "width": "100%",
+                "minInputWidth": "100px"
+            });
+
+            //$('#areaVillage').importTags('foo,bar,baz');//初始化
+
+            $('#villageTags a').click(function(){
+                $('#areaVillage').addTag($(this).text(),{unique:true});
+            })
+            /*----------------------------------*/
+            $("#changeName").tagsInput({
+                "defaultText": "添加公变名称",
+                "width": "100%",
+                "minInputWidth": "100px"
+            });
+           //$('#changeName').importTags('foo1,bar1,baz1');//初始化
+
+            $('#changeTags a').click(function(){
+                $('#changeName').addTag($(this).text(),{unique:true});
+            })
+
+        })

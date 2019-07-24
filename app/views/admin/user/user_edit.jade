@@ -1,0 +1,82 @@
+extend ../layouts/admin
+block head
+	- var selected = 'user'
+block main
+	h1.main-title #{title}
+
+	.table-container
+		form.form(method="POST",action="/admin/user/save")
+			if data._id
+				input(type="hidden",name="data[_id]",value=data._id)
+
+			.form-group.row
+				label.col-sm-2.col-form-label 头像
+				.col-sm-10
+					input#userAvatar.form-control(type="hidden",name="data[avatar]",value=data.avatar)
+					.edit-avatar
+						span.img#avatarImg(style="background-image:url(#{data.avatar})")
+						.btn.btn-info.btn-upload
+							input(type="file",acept="",name="file",onchange="uploadAvatar(this)")
+							span.txt 上传
+
+							
+			.form-group.row
+				label.col-sm-2.col-form-label 用户名
+				.col-sm-10
+					input#userTitle.form-control(type="text",name="data[username]",value=data.username)
+			.form-group.row
+				label.col-sm-2.col-form-label 邮箱
+				.col-sm-10
+					input#userTitle.form-control(type="text",name="data[email]",value=data.email)
+			.form-group.row
+				label.col-sm-2.col-form-label 昵称
+				.col-sm-10
+					input#userTitle.form-control(type="text",name="data[name]",value=data.name)
+			.form-group.row
+				label.col-sm-2.col-form-label 密码
+				.col-sm-10
+					input#userTitle.form-control(type="text",name="data[password]",value=data.password)
+			
+			.form-group.row
+				label.col-sm-2.col-form-label 角色
+				.col-sm-10
+					select.form-control(name="data[role]",value=data.role)
+						option(value="1",selected=data.role<100) 普通用户
+						option(value="100",selected=data.role<200&&data.role>=100) 管理员
+						option(value="200",selected=data.role>=200) 超级管理员
+			
+
+			.form-group.row
+				label.col-sm-2.col-form-label 
+				.col-sm-10
+					button.btn.btn-primary.col-offset-3(type="submit") 提交
+	//- form(method="POST",action="/admin/user/upload",enctype="multipart/form-data")
+	//- 	input(type="file",name="avatarFile")
+	//- 	button.btn.btn-info(type="submit") 上传
+block foot
+	script(type="text/javascript").
+		function uploadAvatar(e){
+			var file = e.files[0]
+			var reader = new FileReader();
+			reader.onload = function(){
+				$("#avatarImg").css({'backgroundImage':'url('+reader.result+')'})
+			}
+			reader.readAsDataURL(e.files[0]);
+			var formData = new FormData();
+		    formData.append('file',file);
+
+			$.ajax({
+				url:"/api/upload",
+				method:"POST",
+				contentType : false,
+				processData: false,
+				data: formData,
+				success:function(data){
+					$('#userAvatar').val(data.obj.file)
+				}
+			})
+		}
+		$(function(){
+			
+
+		})

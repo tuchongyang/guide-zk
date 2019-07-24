@@ -1,0 +1,31 @@
+- if (typeof pages != 'undefined' && pages)
+	.pagination
+		- if(page>1){
+			.page-item
+				a.page-link(href="?#{query}&page=#{page-1}") &lt;
+		- }else{
+			.page-item.disabled
+				a.page-link(href="javascript:;") &lt;
+		- }
+		
+		- for(var i=0;i<pages;i++){
+			- var url = '?'+query+'&page='+(i+1)
+			- if(page == (i+1)){
+				.page-item.active
+					a.page-link(href="#{url}") #{i+1}
+			- }else{
+				.page-item
+					a.page-link(href="#{url}") #{i+1}
+			- }
+
+		- }
+		- if(page<pages){
+			.page-item
+				a.page-link(href="?#{query}&page=#{page+1}") &gt;
+		- }else{
+			.page-item.disabled
+				a.page-link(href="javascript:;") &gt;
+		- }
+
+		.page-item
+			span.page-txt 总数量#{count}，当前#{page}/#{pages}

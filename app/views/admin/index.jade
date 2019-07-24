@@ -1,0 +1,36 @@
+extend layouts/admin
+block head
+	- var selected = 'admin'
+block main
+	h1.main-title 数据概览
+	.state-group.mb-5
+		.item
+			a(href="/admin/office/list")
+				b= count.office || 0
+				span 总营业厅数
+		.item
+			a(href="/admin/faq/list")
+				b= count.faq || 0
+				span 总用电常识数
+		.item
+			a(href="/admin/blackout/list")
+				b= count.blackout || 0
+				span 总停电信息数
+		.item
+			a(href="/admin/user/list")
+				b= count.user || 0
+				span 总用户量
+		.item
+			a(href="/admin/image/list")
+				b= count.image || 0
+				span 总图片数
+
+	h1.main-title 快捷菜单
+	.fast-menus
+		a.item(href="/admin/blackout/new",target="_blank")
+			i.fa.fa-book
+			span 添加停电信息
+		a.item(href="/")
+			i.fa.fa-film
+			span 前端预览
+		

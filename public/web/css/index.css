@@ -1,0 +1,8 @@
+@charset "utf-8";
+body{background: #f4f4f4;}
+.header .logo .title {font-size: .24rem;color:#fff; line-height: .45rem;  height: .45rem;}
+
+.index-title{font-size: 18px;text-align: center;margin-bottom: 30px;}
+.yyt-list{ text-align: center; }
+.yyt-list .item{width: 400px;line-height: 60px;background:#fff;display: inline-block;padding: 10px;box-shadow: 0 0 10px rgba(0,0,0,.1);position:relative;font-size: 16px;margin:0 10px 10px 10px;}
+.yyt-list .item .plan{position:absolute;bottom:0;right:0;width: 0;height: 0;border-top: 10px solid transparent;border-left: 10px solid transparent;border-right: 10px solid #00a997;border-bottom: 10px solid #00a997;}

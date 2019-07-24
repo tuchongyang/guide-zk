@@ -1,0 +1,16 @@
+extends web/layouts/default
+block head
+    style(type="text/css").
+        body{background:#f8f8f8;}
+        .notfound-con{padding: 100px 0;text-align:center;}
+        .notfound-img{}
+        .notfound-text{font-size: 16px;padding: 30px 0;}
+        .notfound-btns .btn{display:inline-block;background:#cba157;color:#fff;padding: 0 30px;line-height: 40px;border-radius:40px;}
+block main
+  .notfound-con
+    .notfound-img
+        img(src="/web/images/404.png")
+    .notfound-text
+        span 您访问的页面不在地球上，请回火星吧
+    .notfound-btns
+        a.btn(href="/") 返回首页

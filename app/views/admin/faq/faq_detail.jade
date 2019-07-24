@@ -1,0 +1,48 @@
+extend ../layouts/admin
+block head
+    - var selected = 'faq'
+block main
+    h1.main-title #{title}
+
+    .table-container
+        form.form(method="POST",action="/admin/faq/save")
+            if data._id
+                input(type="hidden",name="data[_id]",value=data._id)
+
+            
+            .form-group.row
+                label.col-sm-2.col-form-label 常识标题
+                .col-sm-10
+                    input#userTitle.form-control(type="text",name="data[title]",value=data.title)
+            
+            .form-group.row
+                label.col-sm-2.col-form-label 常识内容
+                .col-sm-10
+                    #content_data(hidden)= data.content
+
+                    script#container(name="data[content]", type="text/plain").
+                        
+            
+            
+            
+            .form-group.row
+                label.col-sm-2.col-form-label 
+                .col-sm-10
+                    button.btn.btn-primary.col-offset-3(type="submit") 提交
+
+block foot
+    script(type="text/javascript", src="/libs/ueditor/ueditor.config.js")
+    script(type="text/javascript", src="/libs/ueditor/ueditor.all.min.js")
+    script(type="text/javascript").
+        
+        $(function(){
+            
+
+        })
+    script(type="text/javascript").
+
+        var ue = UE.getEditor('container');
+        ue.ready(function() {
+            //设置编辑器的内容
+            ue.setContent($("#content_data").text());
+        });

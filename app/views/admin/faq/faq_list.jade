@@ -1,0 +1,55 @@
+extend ../layouts/admin
+block head
+	- var selected = 'faq'
+block main
+	h1.main-title #{title}
+
+	.button-group.mb-3.clearfix
+		a.btn.btn-primary.float-right(href="/admin/faq/new") 新增
+
+	.table-container
+		table.table
+			thead
+				tr
+					td 编号
+					td 常识名称
+					td 更新时间
+					td 操作
+			tbody
+				each item,index in list
+					tr
+						td= index+1
+						td= item.title
+						td #{moment(item.meta.updateAt).format('YYYY-MM-DD hh:mm:ss')}
+						td
+							a.btn.btn-primary(href="/admin/faq/detail/#{item._id}",data-id="#{item._id}") 修改
+							|&nbsp;
+							a.btn.btn-danger.btn-del(href="javascript:;",data-id="#{item._id}") 删除
+		if list.length<=0
+			.empty 没有用户数据
+
+	
+		
+
+block foot
+	script(type="text/javascript").
+		$(function(){
+			
+			/*电影删除*/
+			$('.btn-del').click(function(){
+				var id=$(this).data("id");
+				if(confirm("确认删除吗")){
+
+					$.ajax({
+						url:"/admin/faq/"+id,
+						method:"DELETE",
+						success:function(data){
+
+							alert(data.msg);
+							location.reload();
+						}
+					})
+				}
+				
+			})
+		})

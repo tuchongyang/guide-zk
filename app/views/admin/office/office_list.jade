@@ -1,0 +1,86 @@
+extend ../layouts/admin
+block head
+	- var selected = 'office'
+block main
+	h1.main-title #{title}
+
+	.button-group.mb-3.clearfix
+		a.btn.btn-primary(href="/admin/office/new") 新增
+
+	form.form-inline.mb-2(action="",method="get")
+		.form-group
+			label.sr-only 名称
+			input.form-control(type="text",placeholder="搜索网点名称",name="q",value=q)
+		.form-group.mx-sm-3
+			label.sr-only 网点类型
+			select.form-control(size,name="rank")
+				option(value="",selected=rank=='') 全部
+				option(value="1",selected=rank==1) 三型一化A级厅
+				option(value="2",selected=rank==2) 三型一化B级厅
+				option(value="3",selected=rank==3) 三型一化C级厅
+				option(value="4",selected=rank==4) 非三型一化厅
+		.form-group
+			button.btn.btn-primary(type='submit') 搜索
+	.table-container
+		table.table
+			thead
+				tr
+					td 编号
+					td 网点名称
+					td 网点级别
+					td 网点地址
+					td 网点电话
+					td 更新时间
+					td 操作
+			tbody
+				each item,index in list
+					tr
+						td= index+1
+						td= item.name
+						td
+							if item.rank==1
+								span 三型一化A级厅
+							if item.rank==2
+								span 三型一化B级厅
+							if item.rank==3
+								span 三型一化C级厅
+							if item.rank==4
+								span 非三型一化厅
+						td= item.address.area + item.address.town + item.address.address
+						td= item.tel
+						td #{moment(item.meta.updateAt).format('YYYY-MM-DD hh:mm:ss')}
+						td
+							a.btn.btn-primary(href="/admin/office/detail/#{item._id}",data-id="#{item._id}") 修改
+							|&nbsp;
+							if item.plan.bg
+								a.btn.btn-info(href="/admin/office/guide/#{item._id}",data-id="#{item._id}") 导览图
+								|&nbsp;
+							a.btn.btn-danger.btn-del(href="javascript:;",data-id="#{item._id}") 删除
+		if list.length<=0
+			.empty 没有用户数据
+
+	
+		
+
+block foot
+	script(type="text/javascript").
+		$(function(){
+			
+			/*电影删除*/
+			$('.btn-del').click(function(){
+				var id=$(this).data("id");
+				if(confirm("确认删除吗")){
+
+					$.ajax({
+						url:"/admin/office/"+id,
+						method:"DELETE",
+						success:function(data){
+
+							alert(data.msg);
+							location.reload();
+						}
+					})
+				}
+				
+			})
+		})

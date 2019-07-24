@@ -1,0 +1,390 @@
+extend layouts/default
+
+block head
+    
+block main
+    .header 
+        .logo 
+            img(src="/web/images/logo_t.png")
+    .container 
+        .sitebar 
+            ul.nav 
+                li.item 
+                    a.item-link(type="1", href="javascript:;") 
+                        i.icon.ico-nav-1
+                        span 区域导览
+                        i.arrow
+                    dl.subnav(style="display: none;") 
+                        //- dd
+                        //-     a(href="#", data-id="1") 人工业务办理区
+                        //- dd
+                        //-     a(href="#", data-id="2") 自助业务办理区
+                        //- dd
+                        //-     a(href="#", data-id="3") 客户休息区
+                        //- dd
+                        //-     a(href="#", data-id="4") 全智能厨房展示厅
+                        //- dd
+                        //-     a(href="#", data-id="5") 国网商城体验台
+                        //- dd
+                        //-     a(href="#", data-id="6") 互动体验区
+                li.item 
+                    a.item-link(type="3", href="javascript:;") 
+                        i.icon.ico-nav-2
+                        span 用电常识
+                li.item 
+                    a.item-link(type="2", href="javascript:;")
+                        i.icon.ico-nav-3
+                        span 营业网点
+                li.item 
+                    a.item-link(type="4", href="javascript:;")
+                        i.icon.ico-nav-4
+                        span 停电信息
+        input#office_id(type="hidden",value=office.id)
+        input#plan_bg(type="hidden",value=office.plan.bg)
+        input#office_c_l(type="hidden",value=office.plan.current.left)
+        input#office_c_t(type="hidden",value=office.plan.current.top)
+
+        //- loading
+        .main-content#loading(style="text-align:center;display:block;")
+            img(src="/admin/images/loading.svg")
+        //- 导览
+        .main-content#content-1(style="display: block;")
+            .empty(style="display:none;")
+                .empty-img
+                .empty-text 没有导览地图，请前往后台上传
+            .img-wraper 
+                .img-container 
+                    .wave.ripple.danger.path_img#currentPoint(style="display: none;")   
+                        .circle
+                        .circle  
+                        .circle  
+                        .wave-content   
+                            i
+            .img-notice 
+                .item 
+                    i.ico-point-static
+                    span 您目前所在的位置
+                .item 
+                    i.ico-point-path
+                    span 前往您办理所需业务的路径
+  
+        //- <!--网点地图-->
+        .main-content#content-2 
+            //- <!-- .map-tit-infos 
+            //-     .item <img src="assets/images/marker-2.png <span>三型一化A级厅（本厅）</span></div>
+            //-     .item <img src="assets/images/marker-2.png <span>三型一化B级厅</span></div>
+            //-     .item <img src="assets/images/marker-3.png <span>三型一化C级厅</span></div>
+            //-     .item <img src="assets/images/marker-3.png <span>非三型一化厅</span></div>
+            //- </div> -->
+            .map-container#map
+        //- <!--用电常识-->
+        .main-content#content-3
+            .empty(style="display:none;")
+                .empty-img
+                .empty-text 用电常识空空的
+            .changshi-list 
+                .item.loading
+                    img(src="/admin/images/loading.svg")
+                    
+            .pagination
+                .pages
+        //- <!--停电信息-->
+        .main-content#content-4 
+            .empty(style="display:none;")
+                .empty-img
+                .empty-text 停电信息空空的
+            .td-list 
+                
+            .pagination(style="margin-top: -.4rem;")
+                .pages 
+
+block foot
+    script(type="text/javascript", src="http://api.map.baidu.com/api?v=2.0&ak=OUQIb84Q3NoHxGShSQ5zTmYq")
+    script(type="text/javascript", src="/web/js/common.js")
+    script(type="text/javascript").
+        var map,navigate, office_list=[];
+        var office_id = $('#office_id').val(),
+            bg = $("#plan_bg").val(),
+            current_left = $("#office_c_l").val(),
+            current_top = $("#office_c_t").val();
+
+        function init_guide(callback){
+            $.ajax({
+                method: "get",
+                url: '/api/guide/list?office='+office_id,
+                dataType:'json',
+                success:function(res){
+                    if(res.success){
+                         navigate = new Navigate({container:".img-container",bg: bg,list: res.list,currentPosition:{top: current_top,left: current_left}});
+                         $(".subnav").empty();
+                         res.list.map(function(item){
+                            $(".subnav").append('<dd><a href="javascript:;" data-id="'+item._id+'">'+item.name+'</a></dd>')
+                         })
+                         callback && callback();
+                    }else{
+                        
+                    }
+                }
+            });
+        }
+
+        function init_office(){
+            $.ajax({
+                method: "get",
+                url: '/api/office/list',
+                dataType:'json',
+                success:function(res){
+                    if(res.success){
+                         office_list = res.list.map(function(item){
+                            if(item._id == office_id){item.iscurrent=1}
+                            else{item.iscurrent = 0}
+                            return item;
+                         })
+                    }else{
+                        
+                    }
+                }
+            });
+        }
+        init_office();
+
+        $(function(){
+            $(".sitebar .item-link").click(function(){
+                if($(this).parent().hasClass('active')){
+                    $(this).parent().removeClass('active').find('.subnav').slideUp();
+                }else{
+                    $(this).parent().addClass('active').siblings().removeClass('active');
+                    if($(this).parent().find('.subnav')){
+                        $(this).parent().find('.subnav').slideDown();
+                    }
+                    $(this).parent().siblings().find('.subnav').slideUp();
+                }
+                
+
+                show_tab($(this).attr('type'),$(this));
+            })
+            $(".sitebar").on('click','.subnav a',function(){
+                $(this).parent().addClass('active').siblings().removeClass('active');
+                navigate.show($(this).data("id"));
+            });
+            $(document).on('click','.changshi-list .link',function(){
+                if($(this).parent().hasClass('active')){
+                    $(this).parent().removeClass('active').find('.subs').slideUp();
+                }else{
+                    $('.changshi-list .subs').slideUp();
+                    $(this).parent().addClass('active').siblings().removeClass('active');
+                    $(this).next().slideDown();
+                }
+                
+            })
+            if(!bg){
+                $('#content-1').find('.empty').show();
+            }
+            init_guide(function(){
+                 $(".sitebar .item-link").eq(0).click();
+            })
+            
+            function show_tab(type,_this){
+                $('#content-'+type).show().siblings('.main-content').hide();
+                if(type==2 || !map){
+                    init_map({container:"map", markers: office_list});
+                }
+                if(type==1){
+                    _this.next().find('dd').removeClass('active');
+                    $(".path_img").hide();
+                    navigate.showCurrent();
+                }
+
+            }
+
+        })
+
+        var faq = {
+            temp: $("#content-3"),
+            map: {
+                page_no: 1,
+                page_size: 5
+            },
+            get_data: function(){
+                var _this = this;
+                $.ajax({
+                    method: "get",
+                    url: '/api/faq/list?page_no='+_this.map.page_no+'&page_size='+_this.map.page_size,
+                    dataType:'json',
+                    success:function(res){
+                        if(res.success){
+                            _this.map = res.map;
+                            _this.init_temp(res.list);
+                            res.list.length && _this.init_pages();
+                        }else{
+                            
+                        }
+                    }
+                });
+            },
+            init_temp: function(list){
+                $(".changshi-list").empty();
+                list.map(function(item){
+                    var str = '<div class="item"><a href="javascript:;" class="link"> <i class="arrow"></i>'+item.title+'</a>\
+                        <div class="subs" style="display: none;">'+item.content+'</div>\
+                      </div>'
+                    $(".changshi-list").append(str);
+                });
+                !list.length && this.temp.find('.empty').show();
+            },
+            init_pages: function(){
+                var _this = this;
+                _this.temp.find(".pagination .pages").empty();
+                //- _this.temp.find(".pagination .info").html('<span>当前第<em>'+_this.map.page_no+'</em>页，共<em>'+_this.map.total_pages+'</em>页<em>'+_this.map.count+'</em>条数据</span>');
+                _this.temp.find(".pagination .pages").html('<a class="prev" href="javascript:;">上一页</a>');
+                if(_this.map.total_pages <= 10){
+                    for(var i = 1;i <= _this.map.total_pages;i++){
+                        _this.temp.find(".pagination .pages").append('<a '+ (_this.map.page_no == i?' class="active"':'')+' data-page="'+i+'">'+i+'</a>');
+                    }
+
+                }else{
+                    var start = 1,end = 5;
+                    if(_this.map.page_no > 3){
+                        start = parseInt(_this.map.page_no) - 2;
+                        end = parseInt(_this.map.page_no) + 2;
+                    }
+                    if(_this.map.page_no > _this.map.total_pages-2){
+                        start= _this.map.total_pages - 4;
+                        end = _this.map.total_pages;
+                    }
+                    for(var i = start;i <= end;i++){
+                        _this.temp.find(".pagination .pages").append('<a '+ (_this.map.page_no == i?' class="active"':'')+' data-page="'+i+'">'+i+'</a>');
+                    }
+                }
+
+                _this.temp.find(".pagination .pages").append('<a class="next" href="javascript:;">下一页</a>');
+
+                if(_this.map.page_no<=1){
+                    _this.temp.find(".pagination .pages .prev").addClass('disable');
+                }
+
+                if(_this.map.page_no>=_this.map.total_pages){
+                    _this.temp.find(".pagination .pages .next").addClass('disable');
+                }
+
+                _this.temp.find(".pagination .pages").off('click').on('click','a',function () {
+                    if(_this.map.page_no == $(this).data('page')||$(this).hasClass("disable")){
+                        return;
+                    }
+                    if($(this).hasClass("prev")&&_this.map.page_no>1){
+                        _this.map.page_no--;
+                    }else if($(this).hasClass("next")&&_this.map.total_pages>_this.map.page_no){
+                        _this.map.page_no++;
+                    }else{
+                        _this.map.page_no = $(this).data('page');
+
+                    }
+
+                    _this.get_data();
+                })
+            }
+        }
+        faq.get_data();
+        
+        var blackout = {
+            temp: $("#content-4"),
+            map: {
+                page_no: 1,
+                page_size: 5
+            },
+            get_data: function(){
+                var _this = this;
+                $.ajax({
+                    method: "get",
+                    url: '/api/blackout/list?page_no='+_this.map.page_no+'&page_size='+_this.map.page_size,
+                    dataType:'json',
+                    success:function(res){
+                        if(res.success){
+                            _this.map = res.map;
+                            _this.init_temp(res.list);
+                            res.list.length && _this.init_pages();
+                        }else{
+                            
+                        }
+                    }
+                });
+            },
+            init_temp: function(list){
+                $(".td-list").empty();
+                list.map(function(item){
+                    var startdate = new Date(item.start_time.replace("T",' ').replace(/-/g,'/'));
+                    var enddate = new Date(item.end_time.replace("T",' ').replace(/-/g,'/'));
+                    var month = (startdate.getMonth()+1)<10?'0'+(startdate.getMonth()+1):(startdate.getMonth()+1);
+                    var str = '<div class="item"> \
+                                <div class="date"> \
+                                  <div class="day">'+month+'-'+startdate.getDate()+'</div>\
+                                  <div class="year">'+startdate.getFullYear()+'</div>\
+                                  <div class="arrow"></div>\
+                                </div>\
+                                <h3 class="title">'+item.title+'</h3>\
+                                <dl class="details"> \
+                                  <dd><span class="tit"> <i class="ico-td-1"></i><span>停电时间:</span></span><span class="det">'+startdate.Format('yyyy-MM-dd hh:mm:ss')+'—'+enddate.Format('yyyy-MM-dd hh:mm:ss')+'</span></dd>\
+                                  <dd><span class="tit"><i class="ico-td-2"></i><span>停电范围:</span></span><span class="det">'+item.area_town+':'+item.area_village.join('、')+'</span></dd>\
+                                  <dd><span class="tit"><i class="ico-td-3"></i><span>停电线路:</span></span><span class="det">'+item.dead_line+'</span></dd>\
+                                  <dd><span class="tit"> <i class="ico-td-4"></i><span>公变名称:</span></span><span class="det">'+item.change_name.join(',')+'</span></dd>\
+                                </dl>\
+                              </div>'
+                    $(".td-list").append(str);
+                    
+                });
+                !list.length && this.temp.find('.empty').show();
+            },
+            init_pages: function(){
+                var _this = this;
+                _this.temp.find(".pagination .pages").empty();
+                //- _this.temp.find(".pagination .info").html('<span>当前第<em>'+_this.map.page_no+'</em>页，共<em>'+_this.map.total_pages+'</em>页<em>'+_this.map.count+'</em>条数据</span>');
+                _this.temp.find(".pagination .pages").html('<a class="prev" href="javascript:;">上一页</a>');
+                if(_this.map.total_pages <= 10){
+                    for(var i = 1;i <= _this.map.total_pages;i++){
+                        _this.temp.find(".pagination .pages").append('<a '+ (_this.map.page_no == i?' class="active"':'')+' data-page="'+i+'">'+i+'</a>');
+                    }
+
+                }else{
+                    var start = 1,end = 5;
+                    if(_this.map.page_no > 3){
+                        start = parseInt(_this.map.page_no) - 2;
+                        end = parseInt(_this.map.page_no) + 2;
+                    }
+                    if(_this.map.page_no > _this.map.total_pages-2){
+                        start= _this.map.total_pages - 4;
+                        end = _this.map.total_pages;
+                    }
+                    for(var i = start;i <= end;i++){
+                        _this.temp.find(".pagination .pages").append('<a '+ (_this.map.page_no == i?' class="active"':'')+' data-page="'+i+'">'+i+'</a>');
+                    }
+                }
+
+                _this.temp.find(".pagination .pages").append('<a class="next" href="javascript:;">下一页</a>');
+
+                if(_this.map.page_no<=1){
+                    _this.temp.find(".pagination .pages .prev").addClass('disable');
+                }
+
+                if(_this.map.page_no>=_this.map.total_pages){
+                    _this.temp.find(".pagination .pages .next").addClass('disable');
+                }
+
+                _this.temp.find(".pagination .pages").off('click').on('click','a',function () {
+                    if(_this.map.page_no == $(this).data('page')||$(this).hasClass("disable")){
+                        return;
+                    }
+                    if($(this).hasClass("prev")&&_this.map.page_no>1){
+                        _this.map.page_no--;
+                    }else if($(this).hasClass("next")&&_this.map.total_pages>_this.map.page_no){
+                        _this.map.page_no++;
+                    }else{
+                        _this.map.page_no = $(this).data('page');
+
+                    }
+
+                    _this.get_data();
+                })
+            }
+        }
+        blackout.get_data();
+       

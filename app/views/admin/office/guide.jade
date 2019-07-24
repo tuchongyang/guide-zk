@@ -1,0 +1,248 @@
+extend ../layouts/admin
+block head
+    - var selected = 'office'
+    link(type="text/css",rel="stylesheet",href="/admin/css/element-drag.css")
+block main
+    h1.main-title #{title}
+    input#plan_bg(type="hidden",value=data.plan_bg)
+    input#office_id(type="hidden",value=data.id)
+    input#office_c_l(type="hidden",value=data.plan_current_left)
+    input#office_c_t(type="hidden",value=data.plan_current_top)
+    .table-container
+        .row.guide-edit
+            .col-sm-3
+                .guid-edit-bar
+                    .title 导览图
+                    .nav.flex-column.nav-pills
+                        //- a.nav-link.active(href="#") aaaa
+                        //- a.nav-link(href="#") aaaa
+                        //- a.nav-link(href="#") aaaa
+                        //- a.nav-link(href="#") aaaa
+                    .input-group.add-menu-group
+                        input.form-control#add_text
+                        .input-group-append
+                            button.btn.btn-outline-secondary(onclick="guide.add()") 添加
+            .col-sm-9
+                .guide-edit-con
+                    .btn-group.mb-2
+                        button.btn.btn-primary#add_area 添加图片
+                    .dw-img-container
+                        .dw-img-wraper#img_wraper
+                            img#bg_img(src="")
+                            .wave.ripple.danger.path_img#currentPoint(style="display: none;")  
+                                .circle
+                                .circle  
+                                .circle  
+                                .wave-content  
+                                    i
+
+        .text-center.mt-3
+            .button.btn.btn-primary#btn_save 保存
+
+    .modal.fade#modModal(tabindex="-1", role="dialog", aria-labelledby="exampleModalLabel", aria-hidden="true")
+        .modal-dialog.modal-lg(role="document")
+            .modal-content
+                .modal-header
+                    h5.modal-title#exampleModalLabel 修改名称
+                    button.close(type="button", data-dismiss="modal", aria-label="Close")
+                        span(aria-hidden="true") &times;
+                .modal-body
+                    .form-group.row
+                        label.col-sm-2.col-form-label 导览名称
+                        .col-sm-10
+                            input.form-control#current_name(type="text",value="")
+                            
+                .modal-footer
+                    button.btn.btn-primary#mod_confirm(type="button") 确认
+
+    script(type="text/javascript",src="/admin/js/element-drag.js")
+    script(type="text/javascript").
+  
+        var guide = {
+            list: [],
+            index: null,
+            scale: 1,
+            add: function(){
+                var name = $('#add_text').val();
+                if(!name){
+                    $.loading.show({template:"请输入导览名称",duration:1000});return;
+                }
+                if(this.list.find(function(item){return item.name == name})){
+                    $.loading.show({template:"导览名称已存在",duration:1000});return;
+                }
+                var a = {
+                    office: $("#office_id").val(),
+                    name: $('#add_text').val(),
+                    area_list: []
+                }
+                this.list.push(a);
+                $('.guid-edit-bar .nav').append('<li class="nav-item"><a class="nav-link" href="javascript:;">'+a.name+'</a><b class="btn-mod"><i class="fa fa-pencel"></i></b><b class="btn-del"><i class="fa fa-trash-o"></i></b></li>');
+                this.select(this.list.length-1);
+                $('#add_text').val('');
+            },
+            init_bg: function(){
+                var bg_img = document.getElementById('bg_img');
+                var _this = this;
+                bg_img.onload = function(){
+                    var w = this.width;
+                    if(this.width > $(".dw-img-container").width()){
+                        this.style.width = $(".dw-img-container").width()+'px';
+                        _this.scale = $(".dw-img-container").width()/w;
+                    }
+                    _this.init();
+                    /*加载当前点*/
+                    if($("#office_c_l").val()){
+                        $("#currentPoint").css({top:$("#office_c_t").val()*_this.scale+'px',left:$("#office_c_l").val()*_this.scale+'px',width: 70*_this.scale,height: 70*_this.scale,}).show();
+                    }
+                }
+                bg_img.src = $("#plan_bg").val();           
+            },
+            init_nav: function(){
+                $('.guid-edit-bar .nav').empty();
+                guide.list.map(function(item){
+                    $('.guid-edit-bar .nav').append('<li class="nav-item"><a class="nav-link" href="javascript:;">'+item.name+'</a><b class="btn-mod"><i class="fa fa-pencil"></i></b><b class="btn-del"><i class="fa fa-trash-o"></i></b></li>');
+                })
+            },
+            select: function(index){
+                if(index == this.index){return;}
+                var _this = this;
+                $('.guid-edit-bar .nav li').eq(index).find('a').addClass('active').parent().siblings().find('a').removeClass('active');
+                this.index = index;
+                $(".pst-element").remove();
+                guide.list[_this.index].area_list.map(function(item){
+                    _this.init_area(item);
+                })
+            },
+            init_area: function(area){
+                var _this = this;
+                var element_control= '<div class="nbar nbar-rotate nbar-radius"></div>'
+                        +'<div class="nbar nbar-line"></div>'
+                        +'<div class="nbar nbar-n"><div class="nbar-radius"></div></div>'
+                        +'<div class="nbar nbar-s"><div class="nbar-radius"></div></div>'
+                        +'<div class="nbar nbar-e"><div class="nbar-radius"></div></div>'
+                        +'<div class="nbar nbar-w"><div class="nbar-radius"></div></div>'
+                        +'<div class="nbar nbar-nw nbar-radius"></div>'
+                        +'<div class="nbar nbar-se nbar-radius"></div>'
+                        +'<div class="nbar nbar-sw nbar-radius"></div>'
+                        +'<div class="nbar nbar-ne nbar-radius"></div>';
+                    var div = $('<div ele-drag class="pst-element image-element">'
+                        +'   <div class="el-box"><div class="el-content"><img src="'+area.image+'"></div></div>'
+                        +   element_control
+                        +'</div>');
+                    div.css({"left":area.left*_this.scale+"px","top":area.top*_this.scale+"px"}).attr('id','ele_'+area.id).find('.el-content').css({"width":area.width*_this.scale,"height":area.height*_this.scale});
+
+                    $(".pst-element").removeClass('active');
+                    $("#img_wraper").append(div);
+            },
+            add_area: function(src){
+                var _this = this;
+                var path_img = new Image();
+                var img_wraper = document.getElementById('img_wraper');
+                path_img.onload = function(){
+                    var w = this.width,
+                        h = this.height,
+                        l = 0,t = 0;
+                    if(this.width > img_wraper.offsetWidth){
+                        w = img_wraper.offsetWidth;
+                        h = w*this.height/this.width;
+                        this.style.width = w +'px';
+                    }
+                    var area = {
+                        id: (new Date()).getTime(),
+                        image: src,
+                        width: w/_this.scale,
+                        height: h/_this.scale,
+                        left: l/_this.scale,
+                        top: t/_this.scale
+                    }
+                    guide.list[guide.index].area_list.push(area);
+                    _this.init_area(area);
+                }
+                path_img.src=src;
+            },
+            init: function(){
+                var _this = this;
+                $.ajax({
+                    method: "get",
+                    url: '/api/guide/list?office='+$('#office_id').val(),
+                    dataType:'json',
+                    success:function(res){
+                        if(res.success){
+                            _this.list = res.list;
+                            _this.init_nav();
+                            res.list.length && _this.select(0);
+                        }else{
+                            
+                        }
+                    }
+                });
+            }
+        }
+
+        guide.init_bg();
+
+        /* 次方法用于更新guide.list里的area_list的某个对象 */
+        function update_area(dragevent){
+            var a = guide.list[guide.index].area_list.find(function(item){return item.id == dragevent.target.attr('id').replace('ele_','')});
+            a.width = dragevent.target.width()/guide.scale;
+            a.height = dragevent.target.height()/guide.scale;
+            a.top = dragevent.target.position().top/guide.scale;
+            a.left = dragevent.target.position().left/guide.scale;
+        }
+
+        $(function(){
+            $("#add_area").click(function(){
+                if(guide.index === null){
+                    alert("请先添加导览");return;
+                }
+                $.imageService({
+                    select: function(imgs){
+                        guide.add_area(imgs[0].file)
+                    }
+                })
+            })
+            //导览图点击
+            $(".guid-edit-bar").on('click','.nav a',function(){
+                var index = $(this).parent().index();
+                guide.select(index);
+            })
+            //修改名称
+            $(".guid-edit-bar").on('click','.nav .btn-mod',function(){
+                var name = $(this).parent().find('a').text(),_this = this;
+                $("#current_name").val(name);
+                $("#modModal").modal('show');
+                $("#mod_confirm").off('click').on('click',function(){
+                    if(!$("#current_name").val()){
+                        return;
+                    }
+                    guide.list[guide.index].name = $("#current_name").val();
+                    $(_this).parent().find('a').text($("#current_name").val());
+                    $("#modModal").modal('hide');
+                })
+            })
+
+            //保存
+            $("#btn_save").click(function(){
+                console.log(guide.list)
+                if(!guide.list.length){
+                    $.loading.show({template:"请先添加导览",duration:1000});return;
+                }
+                if(!guide.list[guide.index].area_list.length){
+                    $.loading.show({template:"请添加导览图片",duration:1000});return;
+                }
+                $.ajax({
+                    method: "post",
+                    url: '/api/office/guide',
+                    dataType: 'json',
+                    data: guide.list[guide.index],
+                    success:function(res){
+                        if(res.success){
+                            location.reload();
+                        }else{
+                            alert("保存失败")
+                        }
+                    }
+                });
+            })
+
+        })

@@ -1,0 +1,251 @@
+extend ../layouts/admin
+block head
+    - var selected = 'office'
+block main
+    h1.main-title #{title}
+
+    .table-container
+        form.form(method="POST",action="/admin/office/save")
+            if data._id
+                input(type="hidden",name="data[_id]",value=data._id)
+
+            
+            .form-group.row
+                label.col-sm-2.col-form-label 网点名称
+                .col-sm-10
+                    input.form-control(type="text",name="data[name]",placeholder="请输入网点名称",value=data.name)
+            .form-group.row
+                label.col-sm-2.col-form-label 网点级别
+                .col-sm-10
+                    select.form-control(name="data[rank]",value=data.rank)
+                        option(value=1) 三型一化A级厅
+                        option(value=2) 三型一化B级厅
+                        option(value=3) 三型一化C级厅
+                        option(value=4) 非三型一化厅
+            .form-group.row
+                label.col-sm-2.col-form-label 网点地址
+                .col-sm-10
+                    .row#demo3.citys
+                        .col-sm-3
+                            select.form-control(name="data[province]")
+                        .col-sm-3
+                            select.form-control(name="data[city]")
+                        .col-sm-3
+                            select.form-control(name="data[area]")
+                        .col-sm-3
+                            select.form-control(name="data[town]")
+
+                    input.mt-2.form-control(type="text",name="data[address_des]",value=data.address_des,placeholder="请输入详细地址")
+                        
+
+            .form-group.row
+                label.col-sm-2.col-form-label 联系电话
+                .col-sm-10
+                    input.form-control(type="text",name="data[tel]",value=data.tel)
+            .form-group.row
+                label.col-sm-2.col-form-label 营业时间
+                .col-sm-10
+                    input.form-control(type="text",name="data[worktime]",value=data.worktime)
+
+            .form-group.row(hidden)
+                label.col-sm-2.col-form-label 网点图片
+                .col-sm-10
+                    input#officeImage.form-control(type="hidden",name="data[image]",value=data.image)
+                    .upload-imgs
+                        - if(data.image){
+                            .item(style="background-image:url(#{data.image})")
+                        - }
+                        .item.item-upload
+
+
+            .form-group.row
+                label.col-sm-2.col-form-label 网点定位
+                .col-sm-10
+                    input.latInput(type="hidden",name="data[lat]",value=data.lat)
+                    input.lngInput(type="hidden",name="data[lng]",value=data.lng)
+                    button.btn.btn-primary.float-left#btnMap(type="button") 打开定位
+
+            .form-group.row
+                label.col-sm-2.col-form-label 大厅图片
+                .col-sm-10
+                    input#bgImgInput.form-control(type="hidden",name="data[plan_bg]",value=data.plan_bg)
+                    .upload-imgs
+                        .item.item-upload#btnBg
+                    .dw-img-container
+                        .dw-img-wraper
+                            img#dwImg(src="")
+                            .wave.ripple.danger.path_img#currentPoint(style="display: none;")  
+                                .circle
+                                .circle  
+                                .circle  
+                                .wave-content  
+                                    i
+                        
+            
+             .form-group.row(hidden)
+                label.col-sm-2.col-form-label 大厅当前位置
+                .col-sm-10
+                    .input-group.mr-2(style="float:left;width:200px;")
+                        .input-group-prepend
+                            .input-group-text left
+                        input.form-control#plan_current_left(type="hidden" placeholder="left",name="data[plan_current_left]",value=data.plan_current_left)
+                    .input-group.mr-2(style="float:left;width:200px;")
+                        .input-group-prepend
+                            .input-group-text top
+                        input.form-control#plan_current_top(type="hidden", placeholder="top",name="data[plan_current_top]",value=data.plan_current_top)
+
+            .form-group.row
+                label.col-sm-2.col-form-label 
+                .col-sm-10
+                    button.btn.btn-primary.col-offset-3(type="submit") 提交
+
+    .modal.fade#mapModal(tabindex="-1", role="dialog", aria-labelledby="exampleModalLabel", aria-hidden="true")
+        .modal-dialog.modal-lg(role="document")
+            .modal-content
+                .modal-header
+                    h5.modal-title#exampleModalLabel 地图定位
+                    button.close(type="button", data-dismiss="modal", aria-label="Close")
+                        span(aria-hidden="true") &times;
+                .modal-body
+                    .empty(style="display:none;")
+                        .loading-wraper
+                            img(src="/admin/images/loading.svg")
+                    .row.mb-2
+                        .col-sm-12
+                            .input-group.mr-2(style="float:left;width:200px;")
+                                .input-group-prepend
+                                    .input-group-text 纬度
+                                input.form-control.latInput.latInput-1(placeholder="经度",name="data[lat]",value=data.lat)
+                            .input-group.mr-2(style="float:left;width:200px;")
+                                .input-group-prepend
+                                    .input-group-text 经度
+                                input.form-control.lngInput.lngInput-1(placeholder="纬度",name="data[lng]",value=data.lng)
+                            .button.btn.btn-info#dingwei 定位
+                    .map#bdmap(style="height:400px")
+                            
+                .modal-footer
+                    button.btn.btn-primary(type="button", data-dismiss="modal") 确认
+   
+
+block foot
+    script(type="text/javascript", src="http://api.map.baidu.com/api?v=2.0&ak=OUQIb84Q3NoHxGShSQ5zTmYq")
+    script(type="text/javascript", src="/libs/jquery.citys.js")
+    script(type="text/javascript").
+        /*============================================*/
+        function init_bg(src){
+            var bgImg = document.getElementById('dwImg');
+            var imgCon = document.getElementById('modBgContainer');
+            bgImg.onload = function(){
+
+                var w = this.width,h=this.height;
+                var scale = 1;
+                if(this.width>$(".dw-img-container").width()){
+                    this.style.width  = $(".dw-img-container").width()+'px';
+                    scale = w/$(".dw-img-container").width();
+                }
+                
+                $("#currentPoint").css({
+                    'left': $("#plan_current_left").val()/scale+'px',
+                    'top': $("#plan_current_top").val()/scale+'px'
+                }).show().dragable({end:function(e,dragevent){
+                    $('#plan_current_left').val(Math.floor($("#currentPoint").position().left*scale))
+                    $('#plan_current_top').val(Math.floor($("#currentPoint").position().top*scale))
+                }});
+
+            }
+            bgImg.src=src;
+        }
+        if(document.getElementById('bgImgInput').value){
+            init_bg(document.getElementById('bgImgInput').value)
+        }
+        /*======================= 地图 start =====================*/
+        var map,maker;
+        function init_map(){
+            map = new BMap.Map("bdmap"); // 创建地图实例  
+            var point = new BMap.Point($('.lngInput').val() || 111.761225,$('.latInput').val() || 30.431981);  // 创建点坐标  
+            map.centerAndZoom(point, 14);                 // 初始化地图，设置中心点坐标和地图级别
+
+            map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+            map.addControl(new BMap.NavigationControl());    
+            map.addControl(new BMap.ScaleControl());    
+            map.addControl(new BMap.OverviewMapControl());
+
+            marker = new BMap.Marker(point);        // 创建标注    
+            map.addOverlay(marker);
+            setTimeout(function(){
+                map.panTo(point);
+            },200);
+            marker.enableDragging();
+            marker.addEventListener("dragend", function(e){
+                $(".latInput").val(e.point.lat);
+                $(".lngInput").val(e.point.lng);   
+            })
+            
+        }
+        $(function(){
+            $('#btnMap').click(function(){
+                $("#mapModal").modal('show');
+                if(!map){
+                   init_map();
+                }
+            });
+            $("#dingwei").click(function(){
+                var lng = $('.lngInput-1').val();
+                var lat = $('.latInput-1').val();
+                if(!lng || !lat){ return}
+                $('.lngInput').val(lng);
+                $('.latInput').val(lat);
+                var n_point = new BMap.Point(lng,lat);
+                map.panTo(n_point);
+                marker.setPosition(n_point);
+            })
+        })
+        /*====================== 地图 end ======================*/
+        $(function(){
+            
+            var $town = $('#demo3 select[name="data[town]"]');
+            var townFormat = function(info){
+                $town.hide().empty();
+                if(info['code']%1e4&&info['code']<7e6){ //是否为“区”且不是港澳台地区
+                    $.ajax({
+                        url:'http://passer-by.com/data_location/town/'+info['code']+'.json',
+                        dataType:'json',
+                        success:function(town){
+                            $town.show();
+                            for(i in town){
+                                $town.append('<option value="'+town[i]+'">'+town[i]+'</option>');
+                            }
+                        }
+                    });
+                }
+            };
+            $('#demo3').citys({
+                provinceField: "data[province]",
+                cityField: "data[city]",
+                areaField: "data[area]",
+                province:'湖北',
+                city:'宜昌',
+                area:'枝江',
+                valueType: 'name',
+                onChange:function(info){
+                    townFormat(info);
+                }
+            },function(api){
+                var info = api.getInfo();
+                townFormat(info);
+            });
+
+            //大厅图片
+            $("#btnBg").click(function(){
+                $.imageService({
+                    select:function(imgs){console.log(imgs)
+                        $('#bgImgInput').val(imgs[0].file);
+                        $("#bgImg").css('background-image','url('+imgs[0].file+')');
+                        init_bg(imgs[0].file)
+                    }
+                })
+            })
+            $('#btnDw').click(function(){
+                init_bg('')
+            })
+        })

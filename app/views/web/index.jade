@@ -1,0 +1,23 @@
+extend layouts/default
+
+block head
+    
+    link(href="web/css/index.css", type="text/css", rel="stylesheet")
+block main
+    .header
+        .logo
+            img(src="/web/images/logo_t.png")
+
+    .container
+        .index-title 供电营业厅
+        .yyt-list
+            if offices && offices.length
+                each item in offices
+                    a.item(href="/o/#{item.id}")
+                        span= item.name
+                        if item.plan.bg
+                            .plan
+
+
+block foot
+    script(src="/web/js/index.js")

@@ -1,0 +1,42 @@
+
+
+.header
+	.logo.float-left
+		h1 国网枝江供电营业厅
+	ul.nav.float-right.mt-3
+		if user
+			li.nav-item.user-head
+				span.img(style="background-image:url(#{user.avatar})") 
+				span.name #{ user.name }
+			li.nav-item(style="padding-top:6px;")
+				a.nav-link(href="/logout") [退出]
+		else
+			li.nav-item
+				a.nav-link 未登录
+
+.sitbar
+	.nav.nav-pills.flex-column
+		.nav-item
+			a.nav-link(href="/admin",class=selected=='admin'?'active':'')
+				i.fa.fa-home
+				span 首页
+		.nav-item
+			a.nav-link(href="/admin/office/list",class=selected=='office'?'active':'')
+				i.fa.fa-globe
+				span 营业网点
+		.nav-item
+			a.nav-link(href="/admin/faq/list",class=selected=='faq'?'active':'')
+				i.fa.fa-flash
+				span 用电常识
+		.nav-item
+			a.nav-link(href="/admin/blackout/list",class=selected=='blackout'?'active':'')
+				i.fa.fa-cloud-download
+				span 停电信息
+		.nav-item
+			a.nav-link(href="/admin/user/list",class=selected=='user'?'active':'')
+				i.fa.fa-user 
+				span 用户
+		.nav-item
+			a.nav-link(href="/admin/image/list",class=selected=='image'?'active':'') 
+				i.fa.fa-image
+				span 图片
