@@ -58,6 +58,7 @@ module.exports = function (app, passport) {
 	app.get('/admin/office/new',auth.admin.requiresLogin, auth.admin.adminAuth, Admin.office.new)
 	app.delete('/admin/office/:id', auth.admin.requiresLogin, auth.admin.adminAuth, Admin.office.delete)
 	app.get('/admin/office/guide/:id',auth.admin.requiresLogin, auth.admin.adminAuth, Admin.office.guide)
+	app.delete('/admin/office/guide/:id',auth.admin.requiresLogin, auth.admin.adminAuth, Admin.office.guide_delete)
 	app.post('/api/office/guide', auth.admin.requiresLogin, Admin.office.guide_save)
 	app.get('/api/guide/list',  Admin.office.guide_list)
 	app.get('/api/office/list', Admin.office.office_list)

@@ -187,3 +187,15 @@ exports.guide_save = async(function* (req, res){
 	
 	}
 })
+exports.guide_delete = async(function* (req, res){
+    const id=req.params.id;
+    try{
+        var guide = yield Guide.findOne({_id:id}).exec()
+        yield guide.remove();
+        var data={"success":true,"msg":"删除成功"}
+        res.json(data);
+    }catch(err){
+        var data={"success":false,"msg":"删除失败"}
+        res.json(data);
+    }
+})
