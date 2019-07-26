@@ -135,8 +135,12 @@ ZoomControl.prototype.initialize = function(map){
  }
 
 function init_map(opt){
-	map = new BMap.Map(opt.container); // 创建地图实例  
-	var point = new BMap.Point(111.765968,30.436091);  // 创建点坐标  
+	map = new BMap.Map(opt.container); // 创建地图实例 
+	if(opt.markers.length){
+		var point = new BMap.Point(opt.markers[0].lng,opt.markers[0].lat);  // 创建点坐标 
+	}else{
+		var point = new BMap.Point(114.157774,30.498675);  // 创建点坐标 
+	}
 	map.centerAndZoom(point, 12);                 // 初始化地图，设置中心点坐标和地图级别
 
 	map.addControl(new BMap.NavigationControl());    

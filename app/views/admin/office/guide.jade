@@ -104,7 +104,7 @@ block main
                 })
             },
             select: function(index){
-                if(index == this.index){return;}
+                //- if(index == this.index){return;}
                 var _this = this;
                 $('.guid-edit-bar .nav li').eq(index).find('a').addClass('active').parent().siblings().find('a').removeClass('active');
                 this.index = index;
@@ -224,25 +224,25 @@ block main
             .on('click','.nav .btn-del',function(){
                 var index = $(this).data('index')
                 var current = guide.list[index];
-                confirm('确认删除【'+current.name+'】吗？',function(){
+                if(confirm('确认删除【'+current.name+'】吗？')){
                     $.ajax({
                         method: "delete",
-                        url: '/api/office/guide/'+current.id,
+                        url: '/admin/office/guide/'+current._id,
                         dataType: 'json',
                         success:function(res){
                             if(res.success){
                                 guide.list.splice(index,1);
                                  $('.guid-edit-bar .nav .nav-item').eq(index).remove();
-                                 if(index==guide.index){
-                                    //- $(".pst-element").remove()
+                                $(".pst-element").remove()
+                                if(guide.list>0){
                                     guide.select(0)
-                                 }
+                                }
                             }else{
                                 alert("保存失败")
                             }
                         }
                     });
-                })
+                }
             })
 
 

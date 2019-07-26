@@ -25,6 +25,10 @@ block main
             .form-group.row
                 label.col-sm-2.col-form-label 网点地址
                 .col-sm-10
+                    input#province(type="hidden",value=data['province'])
+                    input#city(type="hidden",value=data['city'])
+                    input#area(type="hidden",value=data['area'])
+                    input#town(type="hidden",value=data['town'])
                     .row#demo3.citys
                         .col-sm-3
                             select.form-control(name="data[province]")
@@ -223,9 +227,11 @@ block foot
                 provinceField: "data[province]",
                 cityField: "data[city]",
                 areaField: "data[area]",
-                province:'湖北',
-                city:'宜昌',
-                area:'枝江',
+                townField: "data[town]",
+                province:$('#province').val(),
+                city:$('#city').val(),
+                area:$('#area').val(),
+                town: $('#town').val(),
                 valueType: 'name',
                 onChange:function(info){
                     townFormat(info);
