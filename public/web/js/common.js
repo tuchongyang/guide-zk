@@ -126,7 +126,7 @@ ZoomControl.prototype.initialize = function(map){
     div.classList.add('map-back-center');
     // 绑定事件，点击一次放大两级    
     div.onclick = function(e){  
-        map.panTo(new BMap.Point(114.157774,30.498675));    
+        map.panTo(new BMap.Point(114.158951,30.486044));    
     }    
     // 添加DOM元素到地图中   
     map.getContainer().appendChild(div);    
@@ -139,7 +139,7 @@ function init_map(opt){
 	if(opt.markers.length){
 		var point = new BMap.Point(opt.markers[0].lng,opt.markers[0].lat);  // 创建点坐标 
 	}else{
-		var point = new BMap.Point(114.157774,30.498675);  // 创建点坐标 
+		var point = new BMap.Point(114.158951,30.486044);  // 创建点坐标 
 	}
 	map.centerAndZoom(point, 14);                 // 初始化地图，设置中心点坐标和地图级别
 
