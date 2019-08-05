@@ -1,0 +1,6 @@
+var ROOT_CONFIG = {
+	domain: "http://tucy.top:3100",
+	socket_domain: "ws://tucy.top:3100"
+}
+
+export default ROOT_CONFIG

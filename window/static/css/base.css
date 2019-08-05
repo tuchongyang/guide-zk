@@ -1,0 +1,55 @@
+@charset "utf-8";
+*{ margin:0; padding:0; box-sizing: border-box;}
+body, input, button, textarea { color:#000; font:.26rem/1 "Microsoft YaHei", Arial, simsun, Tahoma, Verdana, Helvetica, sans-serif; }
+article, aside, figcaption, figure, footer, header, hgroup, main, nav, section { display:block; }
+body {background-color: #f4f4f4;font-size:100%;position: relative; _background-image:url(about:blank); _background-attachment:fixed; }
+img { border:none; max-width: 100%;}
+li { list-style:none; }
+i, em { font-style:normal; }
+i{width: 1em;height: 1em;display: inline-block;background-repeat: no-repeat;background-size: 100% 100%;}
+a { color:#333; text-decoration:none; cursor:pointer; -webkit-transition: color,background .2s;transition: color,background .2s;}
+a:focus { outline:none; }
+a:active { color:#ffa200; text-decoration:none; }
+input[type="text"]:focus ,select,textarea{ outline:none; }
+input[type="button"], input[type="reset"], input[type="submit"] { cursor:pointer; }
+input[type="reset"]::-moz-focus-inner, input[type="button"]::-moz-focus-inner, input[type="submit"]::-moz-focus-inner, input[type="file"] > input[type="button"]::-moz-focus-inner {border:none;padding:0;}
+img[src=""]{opacity: 0;}
+.btn:active{box-shadow: 3px 3px 10px rgba(0,0,0,.2) inset;}
+#app{font-size: .26rem;}
+
+:-moz-placeholder { 
+    color: #D0D0D0;
+}
+
+::-moz-placeholder { 
+    color: #D0D0D0;
+}
+
+input:-ms-input-placeholder,textarea:-ms-input-placeholder{
+    color: #D0D0D0;
+}
+
+input::-webkit-input-placeholder,textarea::-webkit-input-placeholder{
+    color: #D0D0D0;
+}
+
+
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-button{display:none}
+::-webkit-scrollbar-track:vertical{background-color:black}
+::-webkit-scrollbar-track-piece{background:#FFF}
+::-webkit-scrollbar-thumb{background-color:#8E8E8E;border-radius:5px}
+::-webkit-scrollbar-thumb:hover{background-color:#3B3B3B}
+::-webkit-scrollbar-corner{background-color:#535353}
+::-webkit-scrollbar-resizer{background-color:#FF6E00}
+
+
+body,html{width: 100%;height: 100%;overflow: hidden;}
+body{background: url(/static/images/bg-3.jpg) center no-repeat #050607;background-size: auto 100%;}
+.logo{background: url(/static/images/logo.png) center no-repeat;background-size: contain;width: 39vh;height: 8.9vh;position: absolute;left: 50%;margin-left: -18.2vh;top:2vh;}
+.logo-foot{background: url(/static/images/logo-wangjie.png) center no-repeat;background-size: contain;width: 21.3vh;height: 6.5vh;position: absolute;left: 50%;margin-left: -10.4vh;bottom:3vh;}
+
+.btn-back{position: absolute;top: 8vh;left: 8vh;width: 6.5vh;height: 6.5vh;z-index:50;background: url(/static/images/ico-back.png) center no-repeat;background-size: contain;display: block;border-radius: 1vh;}
+.btn-back:active{background-color:rgba(255,255,255,.3);}
+
+.empty{text-align: center;padding: 20px 0;}
