@@ -144,12 +144,10 @@ ZoomControl.prototype.initialize = function(map){
 
 function init_map(opt){
 	map = new BMap.Map(opt.container); // 创建地图实例 
-	if(opt.markers.length){
-		var point = new BMap.Point(opt.markers[0].lng,opt.markers[0].lat);  // 创建点坐标 
-	}else{
-		var point = new BMap.Point(114.158951,30.486044);  // 创建点坐标 
-	}
-	map.centerAndZoom(point, 14);                 // 初始化地图，设置中心点坐标和地图级别
+	
+	var point = new BMap.Point(114.258951,30.556044);  // 创建点坐标 
+	
+	map.centerAndZoom(point, 12);                 // 初始化地图，设置中心点坐标和地图级别
 
 	map.addControl(new BMap.NavigationControl());    
 	map.addControl(new BMap.ScaleControl());    
@@ -233,7 +231,7 @@ function load_marker(list){
 										<td width="80">网点类型：</td><td>${rank.rank}</td>
 									</tr>
 									<tr>
-										<td width="80">网点地址：</td><td>${item.address.town+item.address.address}</td>
+										<td width="80">网点地址：</td><td>${(item.address.town||"")+item.address.address}</td>
 									</tr>
 									<tr>
 										<td>联系电话：</td><td>${item.tel}</td>
@@ -246,6 +244,16 @@ function load_marker(list){
 						</div>`;
 		map.addOverlay(marker);
 		addClickHander(item.name,content, marker);
+		/*默认打开当前营业厅*/
+		var opt = {  
+	        width : 560,     // 信息窗口宽度  
+	        height: 150,     // 信息窗口高度  
+	        title : item.name , // 信息窗口标题  
+	        enableMessage:true//设置允许信息窗发送短息  
+		};
+		var point = new BMap.Point(marker.getPosition().lng, marker.getPosition().lat);  
+        var infoWindow = new BMap.InfoWindow(content,opt);  // 创建信息窗口对象   
+        map.openInfoWindow(infoWindow,point);                //开启信息窗口  
 	}
 
 
